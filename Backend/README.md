@@ -243,3 +243,95 @@ curl -X GET http://localhost:4000/api/users/logout \
 ```
 
 ---
+
+# Captains — Register Endpoint 🚗
+
+## Endpoint
+
+- **URL:** `/api/captains/register`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+---
+
+## Description
+
+Creates a new captain account. The endpoint validates the payload (including vehicle details), hashes the password, stores the captain in the database, and returns a JWT token plus the created captain object (password excluded).
+
+---
+
+## Request body (JSON)
+
+Required JSON structure:
+
+```json
+{
+  "fullname": {
+    "firstname": "Raj",
+    "lastname": "Kumar"
+  },
+  "email": "raj@example.com",
+  "password": "Password123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "KA01AB1234",
+    "capacity": 4,
+    "type": "car"
+  }
+}
+```
+
+Validation rules:
+- `fullname.firstname` — string, minimum 3 characters
+- `fullname.lastname` — string, minimum 3 characters
+- `email` — valid email format
+- `password` — minimum 6 characters
+- `vehicle.color` — string, minimum 3 characters
+- `vehicle.plate` — string, minimum 3 characters
+- `vehicle.capacity` — integer, minimum 1
+- `vehicle.type` — one of: `car`, `bike`, `scooter`, `van`, `auto-rickshaw`
+
+---
+
+## Responses
+
+| Status | Meaning | Example body |
+|---|---|---|
+| **201 Created** ✅ | Captain created successfully | `{ "token": "<jwt>", "captain": { "_id": "...", "fullname": {"firstname":"Raj","lastname":"Kumar"}, "email":"raj@example.com", "vehicle": {"color":"Red","plate":"KA01AB1234","capacity":4,"type":"car"}, "status":"inactive" } }` |
+| **400 Bad Request** ⚠️ | Validation failed | `{ "errors": [ { "msg": "Invalid email format", "param": "email", "location": "body" } ] }` |
+| **500 Internal Server Error** ⚠️ | Unexpected server or DB error | `{ "error": "error message" }` |
+
+---
+
+## Example (curl)
+
+```bash
+curl -X POST http://localhost:4000/api/captains/register \
+  -H "Content-Type: application/json" \
+  -d '{"fullname":{"firstname":"Raj","lastname":"Kumar"},"email":"raj@example.com","password":"Password123","vehicle":{"color":"Red","plate":"KA01AB1234","capacity":4,"type":"car"}}'
+```
+
+### Example response (201 Created)
+
+```json
+{
+  "token": "<jwt>",
+  "captain": {
+    "_id": "64abc123def4567891",
+    "fullname": {
+      "firstname": "Raj",
+      "lastname": "Kumar"
+    },
+    "email": "raj@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "KA01AB1234",
+      "capacity": 4,
+      "type": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+---
