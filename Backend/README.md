@@ -67,3 +67,67 @@ curl -X POST http://localhost:4000/api/users/register \
 - Use the `errors` array in 400 responses to fix validation issues.
 
 ---
+
+# Users — Login Endpoint 🔐
+
+## Endpoint
+
+- **URL:** `/api/users/login`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+---
+
+## Description
+
+Authenticates an existing user and returns a JWT token along with the user object (password excluded). The endpoint validates credentials and returns appropriate status codes for invalid input or authentication failure.
+
+---
+
+## Request body (JSON)
+
+Required JSON structure:
+
+```json
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+```
+
+Validation rules:
+- `email` — valid email format
+- `password` — present and non-empty
+
+> Tip: Include header `Content-Type: application/json` and ensure the request body is valid JSON.
+
+---
+
+## Responses
+
+| Status | Meaning | Example body |
+|---|---|---|
+| **200 OK** ✅ | Authentication successful | `{ "token": "<jwt>", "user": { "_id": "...", "fullname": {"firstname":"John","lastname":"Doe"}, "email":"john@example.com" } }` |
+| **400 Bad Request** ⚠️ | Validation failed | `{ "errors": [ { "msg": "Invalid email format", "param": "email", "location": "body" } ] }` |
+| **401 Unauthorized** ⚠️ | Invalid credentials | `{ "error": "Invalid email and password" }` |
+| **500 Internal Server Error** ⚠️ | Unexpected server or DB error | `{ "error": "error message" }` |
+
+---
+
+## Example (curl)
+
+```bash
+curl -X POST http://localhost:4000/api/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"jane@example.com","password":"Password123"}'
+```
+
+---
+
+## Notes
+
+- Login returns the same JWT token format that is used for authenticated routes.
+- A `401` response indicates the email/password pair did not match an existing user.
+- Ensure you are sending a `Content-Type: application/json` header and valid JSON body.
+
+---
