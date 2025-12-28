@@ -57,6 +57,22 @@ curl -X POST http://localhost:4000/api/users/register \
   -d '{"fullname":{"firstname":"Jane","lastname":"Doe"},"email":"jane@example.com","password":"Password123"}'
 ```
 
+### Example response (201 Created)
+
+```json
+{
+  "token": "<jwt>",
+  "user": {
+    "_id": "64abc123def4567890",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane@example.com"
+  }
+}
+```
+
 ---
 
 ## Notes & Troubleshooting 🔧
@@ -122,6 +138,22 @@ curl -X POST http://localhost:4000/api/users/login \
   -d '{"email":"jane@example.com","password":"Password123"}'
 ```
 
+### Example response (200 OK)
+
+```json
+{
+  "token": "<jwt>",
+  "user": {
+    "_id": "64abc123def4567890",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane@example.com"
+  }
+}
+```
+
 ---
 
 ## Notes
@@ -159,6 +191,20 @@ curl -X GET http://localhost:4000/api/users/profile \
   -H "Authorization: Bearer <token>"
 ```
 
+### Example response (200 OK)
+
+```json
+{
+  "_id": "64abc123def4567890",
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  },
+  "email": "jane@example.com",
+  "socketId": "abc123socketid"
+}
+```
+
 ---
 
 ## Logout Endpoint 🔒
@@ -186,6 +232,14 @@ Logs out the authenticated user by clearing the `token` cookie and adding the to
 ```bash
 curl -X GET http://localhost:4000/api/users/logout \
   -H "Authorization: Bearer <token>"
+```
+
+### Example response (200 OK)
+
+```json
+{
+  "message": "Logged out successfully"
+}
 ```
 
 ---
