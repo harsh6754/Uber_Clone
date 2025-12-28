@@ -131,3 +131,61 @@ curl -X POST http://localhost:4000/api/users/login \
 - Ensure you are sending a `Content-Type: application/json` header and valid JSON body.
 
 ---
+
+## Profile Endpoint 🧾
+
+- **URL:** `/api/users/profile`
+- **Method:** `GET`
+- **Authentication:** Requires a valid JWT token (send as `Authorization: Bearer <token>` or as a `token` cookie).
+
+---
+
+### Description
+
+Returns the authenticated user's profile information (user object without the password).
+
+### Responses
+
+| Status | Meaning | Example body |
+|---|---|---|
+| **200 OK** ✅ | Profile retrieved successfully | `{ "_id": "...", "fullname": {"firstname":"John","lastname":"Doe"}, "email":"john@example.com", "socketId": "..." }` |
+| **401 Unauthorized** ⚠️ | Missing, invalid, or blacklisted token | `{ "error": "User Unauthorized" }` |
+| **500 Internal Server Error** ⚠️ | Unexpected server or DB error | `{ "error": "error message" }` |
+
+### Example (curl)
+
+```bash
+curl -X GET http://localhost:4000/api/users/profile \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+## Logout Endpoint 🔒
+
+- **URL:** `/api/users/logout`
+- **Method:** `GET`
+- **Authentication:** Requires a valid JWT token.
+
+---
+
+### Description
+
+Logs out the authenticated user by clearing the `token` cookie and adding the token to the blacklist (token is stored in the blacklist collection and expires after 24 hours).
+
+### Responses
+
+| Status | Meaning | Example body |
+|---|---|---|
+| **200 OK** ✅ | Successfully logged out | `{ "message": "Logged out successfully" }` |
+| **401 Unauthorized** ⚠️ | Missing, invalid, or blacklisted token | `{ "error": "User Unauthorized" }` |
+| **500 Internal Server Error** ⚠️ | Unexpected server or DB error | `{ "error": "error message" }` |
+
+### Example (curl)
+
+```bash
+curl -X GET http://localhost:4000/api/users/logout \
+  -H "Authorization: Bearer <token>"
+```
+
+---
