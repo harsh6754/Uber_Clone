@@ -217,3 +217,50 @@ Returns the currently authenticated user's profile information. The request must
 - Status: `500 Internal Server Error`
 - Returned when there is an unexpected failure while retrieving the user profile.
 
+## Users Logout Endpoint
+
+This document describes the `GET /users/logout` endpoint used to log out an authenticated user and blacklist their current JWT token.
+
+## Endpoint
+
+- `GET /users/logout`
+
+## Description
+
+Logs out the current user by clearing the token cookie and saving the active JWT token in a blacklist. Blacklisting prevents the same token from being used again for protected routes even if it has not yet expired.
+
+## Authentication
+
+The request must include a valid JWT token in either the `Authorization` header as `Bearer <token>` or in a cookie named `token`.
+
+## Success Response
+
+- Status: `200 OK`
+- Content type: `application/json`
+
+### Example success response
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+## Error Responses
+
+### Unauthorized
+- Status: `401 Unauthorized`
+- Returned when the request is missing a token, the token is invalid, expired, or has already been blacklisted.
+
+#### Example unauthorized error response
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Server error
+- Status: `500 Internal Server Error`
+- Returned when there is an unexpected failure while clearing the token or blacklisting it.
+
