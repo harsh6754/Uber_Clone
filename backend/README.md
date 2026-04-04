@@ -166,9 +166,54 @@ The request body must be JSON and include the following fields:
 - Status: `500 Internal Server Error`
 - Returned when there is an unexpected failure during authentication.
 
-## How to Use
+## Users Profile Endpoint
 
-1. Send a `POST` request to `/users/register`.
-2. Include the JSON body with `fullname.firstname`, `fullname.lastname`, `email`, and `password`.
-3. If valid, the endpoint returns a JWT token and the created user details.
-4. If invalid, fix the request body and retry.
+This document describes the `GET /users/profile` endpoint used to fetch the authenticated user's profile data.
+
+## Endpoint
+
+- `GET /users/profile`
+
+## Description
+
+Returns the currently authenticated user's profile information. The request must include a valid JWT token in either the `Authorization` header as `Bearer <token>` or in a cookie named `token`.
+
+## Success Response
+
+- Status: `200 OK`
+- Content type: `application/json`
+
+### Example success response
+
+```json
+{
+  "user": {
+    "_id": "<user_id_here>",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "socketId": null
+  }
+}
+```
+
+## Error Responses
+
+### Unauthorized
+- Status: `401 Unauthorized`
+- Returned when the request is missing a token or the token is invalid/expired.
+
+#### Example unauthorized error response
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Server error
+- Status: `500 Internal Server Error`
+- Returned when there is an unexpected failure while retrieving the user profile.
+

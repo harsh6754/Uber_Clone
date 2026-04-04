@@ -3,7 +3,7 @@ const userService = require('../services/user.service');
 const { validationResult } = require('express-validator');
 
 
-//Register User Routes
+//User Registration Controller
 module.exports.registerUser = async (req,res,next) =>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -29,7 +29,7 @@ module.exports.registerUser = async (req,res,next) =>{
 }
 
 
-//Login User Routes
+//User Login Controller 
 module.exports.loginUser = async(req,res,next)=>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -49,9 +49,17 @@ module.exports.loginUser = async(req,res,next)=>{
     }
 
     const token =  user.generateAuthToken();
+    res.cookie('token', token);
 
     res.status(200).json({
         token,user
+    });
+}
+
+//Get User Profile Controller
+module.exports.getUserProfile = async(req,res,next)=>{
+    res.status(200).json({
+        user:req.user
     });
 }
 
