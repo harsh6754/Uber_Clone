@@ -2,16 +2,26 @@ const express = require('express');
 const app = express();
 const dotenv =  require('dotenv');
 const cors = require('cors');
+const connectToDb = require('./DB/db');
+const userRoutes = require('./routes/user.routes');
 
 
 //config dotenv with .env file
 dotenv.config();
 
+//connect to database
+connectToDb();
+
 //middlewares
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 
 app.get('/',(req,res) =>{
     res.send("Hello Harsh Agrawal Welcome to the world of Backend Developer");
 });
 
-module.exports = app;
+//routes
+app.use('/api/users',userRoutes);
+
+module.exports = app; 
