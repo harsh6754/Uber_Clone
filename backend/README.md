@@ -165,7 +165,64 @@ The request body must be JSON and include the following fields:
 - Status: `500 Internal Server Error`
 - Returned when there is an unexpected failure saving the captain or generating the token.
 
-## Users Login Endpoint
+## Captains Login Endpoint
+
+This document describes the `POST /api/captains/login` endpoint used to authenticate an existing captain and return a JWT token.
+
+## Endpoint
+
+- `POST /api/captains/login`
+
+## Description
+
+Authenticates a captain using email and password. If the credentials are valid, the endpoint returns an authentication token and captain profile information.
+
+## Required Request Body
+
+The request body must be JSON and include the following fields:
+
+- `email` (string): valid email address
+- `password` (string): password with minimum length 6 characters
+
+### Example JSON body
+
+```json
+{
+  "email": "agrawalharsh@gmail.com",
+  "password": "H@rsh1028"
+}
+```
+
+## Success Response
+
+- Status: `200 OK`
+- Content type: `application/json`
+
+### Example success response
+
+```json
+{
+  "token": "<jwt_token_here>",
+  "captain": {
+    "_id": "<captain_id_here>",
+    "fullname": {
+      "firstname": "Harsh",
+      "lastname": "Agrawal"
+    },
+    "email": "agrawalharsh@gmail.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "MP 04 XYZ7840",
+      "capacity": 3,
+      "vechileType": "suv"
+    },
+    "status": "offline",
+    "socketId": null
+  }
+}
+```
+
+## Error Responses
 
 ### Validation error
 - Status: `400 Bad Request`
@@ -185,9 +242,122 @@ The request body must be JSON and include the following fields:
 }
 ```
 
+### Authentication error
+- Status: `401 Unauthorized`
+- Returned when the email or password is incorrect.
+
+#### Example authentication error response
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
 ### Server error
 - Status: `500 Internal Server Error`
-- Returned when there is an unexpected failure saving the user or generating the token.
+- Returned when there is an unexpected failure during authentication.
+
+## Captains Profile Endpoint
+
+This document describes the `GET /api/captains/profile` endpoint used to fetch the authenticated captain's profile.
+
+## Endpoint
+
+- `GET /api/captains/profile`
+
+## Description
+
+Returns the currently authenticated captain's profile information. The request must include a valid JWT token in either the `Authorization` header as `Bearer <token>` or in a cookie named `token`.
+
+## Success Response
+
+- Status: `200 OK`
+- Content type: `application/json`
+
+### Example success response
+
+```json
+{
+  "captain": {
+    "_id": "<captain_id_here>",
+    "fullname": {
+      "firstname": "Harsh",
+      "lastname": "Agrawal"
+    },
+    "email": "agrawalharsh@gmail.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "MP 04 XYZ7840",
+      "capacity": 3,
+      "vechileType": "suv"
+    },
+    "status": "offline",
+    "socketId": null
+  }
+}
+```
+
+## Error Responses
+
+### Unauthorized
+- Status: `401 Unauthorized`
+- Returned when the request is missing a token or the token is invalid, expired, or blacklisted.
+
+#### Example unauthorized error response
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Server error
+- Status: `500 Internal Server Error`
+- Returned when there is an unexpected failure while retrieving the captain profile.
+
+## Captains Logout Endpoint
+
+This document describes the `GET /api/captains/logout` endpoint used to log out an authenticated captain.
+
+## Endpoint
+
+- `GET /api/captains/logout`
+
+## Description
+
+Logs out the current captain by clearing the token cookie and blacklisting the active JWT token so it can no longer be used.
+
+## Success Response
+
+- Status: `200 OK`
+- Content type: `application/json`
+
+### Example success response
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+## Error Responses
+
+### Unauthorized
+- Status: `401 Unauthorized`
+- Returned when the request is missing a token or the token is invalid, expired, or blacklisted.
+
+#### Example unauthorized error response
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### Server error
+- Status: `500 Internal Server Error`
+- Returned when there is an unexpected failure while logging out the captain.
 
 ## Users Login Endpoint
 
