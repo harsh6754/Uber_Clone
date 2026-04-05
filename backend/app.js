@@ -5,6 +5,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectToDb = require('./DB/db');
 const userRoutes = require('./routes/user.routes');
+const captainRoutes = require('./routes/captain.routes');
 
 
 //config dotenv with .env file
@@ -25,5 +26,6 @@ app.get('/',(req,res) =>{
 
 //routes
 app.use('/api/users',userRoutes);
+app.use('/api/captains',captainRoutes);
 
 module.exports = app; 

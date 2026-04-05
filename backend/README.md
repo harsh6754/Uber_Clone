@@ -56,7 +56,116 @@ The request body must be JSON and include the following fields:
 
 > Note: The actual response may include user fields depending on the model and how the route sends the user object.
 
+## Captains Register Endpoint
+
+This document describes the `POST /api/captains/register` endpoint used to create a new captain account.
+
+## Endpoint
+
+- `POST /api/captains/register`
+
+## Description
+
+Registers a new captain with full name, email, password, and vehicle information. The endpoint validates the request body and returns a JSON response with a JWT token and the created captain data on success.
+
+## Required Request Body
+
+The request body must be JSON and include the following fields:
+
+- `fullname.firstname` (string): captain's first name, minimum length 3 characters
+- `fullname.lastname` (string): captain's last name, minimum length 3 characters
+- `email` (string): valid email address
+- `password` (string): password with minimum length 6 characters
+- `vehicle.color` (string): vehicle color, minimum length 3 characters
+- `vehicle.plate` (string): vehicle plate number, minimum length 3 characters
+- `vehicle.capacity` (number): vehicle capacity, minimum value 1
+- `vehicle.vechileType` (string): vehicle type, one of `sedan`, `suv`, or `van`
+
+### Example JSON body
+
+```json
+{
+  "fullname": {
+    "firstname": "Harsh",
+    "lastname": "Agrawal"
+  },
+  "email": "god@gmail.com",
+  "password": "anjkdfnsjnja",
+  "vehicle": {
+    "color": "red",
+    "plate": "MP 04 XYZ7840",
+    "capacity": 3,
+    "vechileType": "suv"
+  }
+}
+```
+
+## Success Response
+
+- Status: `201 Created`
+- Content type: `application/json`
+
+### Example success response
+
+```json
+{
+  "token": "<jwt_token_here>",
+  "captain": {
+    "_id": "<captain_id_here>",
+    "fullname": {
+      "firstname": "Harsh",
+      "lastname": "Agrawal"
+    },
+    "email": "agrawalharsh@gmail.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "MP 04 XYZ7840",
+      "capacity": 3,
+      "vechileType": "suv"
+    },
+    "status": "offline",
+    "socketId": null
+  }
+}
+```
+
 ## Error Responses
+
+### Validation error
+- Status: `400 Bad Request`
+- Returned when one or more required fields are missing or invalid.
+
+#### Example validation error response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Please enter a valid email",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+### Email already exists
+- Status: `400 Bad Request`
+- Returned when a captain with the same email address already exists.
+
+#### Example email exists response
+
+```json
+{
+  "message": "Captain with this email already exists"
+}
+```
+
+### Server error
+- Status: `500 Internal Server Error`
+- Returned when there is an unexpected failure saving the captain or generating the token.
+
+## Users Login Endpoint
 
 ### Validation error
 - Status: `400 Bad Request`
