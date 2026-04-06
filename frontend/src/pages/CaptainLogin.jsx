@@ -1,23 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 const CaptainLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [captainData, setCaptainData] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setCaptainData({
+    const captainDataObject = {
       email: email,
       password: password,
-    });
-    console.log(captainData);
+    };
+    setCaptainData(captainDataObject);
+    console.log("Captain Data:", captainDataObject);
     setEmail("");
     setPassword("");
   };
+
+  useEffect(() => {
+    if (captainData && captainData.email) {
+      console.log("Updated captainData state:", captainData);
+    }
+  }, [captainData]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-100 to-slate-50 px-4 flex items-center justify-center">
       <div className="w-full max-w-md rounded-3xl bg-white border border-slate-200 p-8 shadow-2xl">

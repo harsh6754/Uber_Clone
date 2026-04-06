@@ -1,23 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const [userData, setUserData] = useState('');
+  const [userData, setUserData] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setUserData({
-        email:email,
-        password:password
-    })
-    console.log(userData);
+    const userDataObject = {
+      email: email,
+      password: password,
+    };
+    setUserData(userDataObject);
+    console.log("User Data:", userDataObject);
     setEmail("");
     setPassword("");
   };
+
+  useEffect(() => {
+    if (userData && userData.email) {
+      console.log("Updated userData state:", userData);
+    }
+  }, [userData]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-50 px-4 flex items-center justify-center">
@@ -35,7 +40,9 @@ const UserLogin = () => {
 
         <form onSubmit={(e) => handleSubmit(e)} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Email
+            </label>
             <input
               className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition"
               type="email"
@@ -47,7 +54,9 @@ const UserLogin = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Password
+            </label>
             <input
               className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition"
               type="password"
@@ -65,13 +74,19 @@ const UserLogin = () => {
 
         <p className="mt-6 text-center text-sm text-slate-600">
           Don't have an account?{" "}
-          <Link to="/user-signup" className="font-semibold text-blue-600 hover:text-blue-700 transition">
+          <Link
+            to="/user-signup"
+            className="font-semibold text-blue-600 hover:text-blue-700 transition"
+          >
             Sign up
           </Link>
-        </p>
+        </p> 
 
         <div className="mt-8 pt-6 border-t border-slate-200">
-          <Link to='/captain-login' className="flex items-center justify-center w-full rounded-xl bg-emerald-600 px-4 py-3 text-base font-semibold text-white transition hover:bg-emerald-700 active:scale-95">
+          <Link
+            to="/captain-login"
+            className="flex items-center justify-center w-full rounded-xl bg-emerald-600 px-4 py-3 text-base font-semibold text-white transition hover:bg-emerald-700 active:scale-95"
+          >
             Sign in as Captain
           </Link>
         </div>
