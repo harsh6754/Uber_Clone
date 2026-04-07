@@ -13,7 +13,7 @@ const UserSignup = () => {
     const userDataObject = {
       email: email,
       password: password,
-      username: {
+      fullName: {
         firstname: firstname,
         lastname: lastname,
       },
