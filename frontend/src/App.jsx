@@ -8,6 +8,7 @@ import PrivacyPolicy from './pages/PrivacyAndTermPage/PrivacyPolicy'
 import TermsAndConditions from './pages/PrivacyAndTermPage/TermsAndConditions'
 import GetStart from './pages/GetStart'
 import UserHome from './pages/UserHomePage/UserHome'
+import UserProtectedWrapper from './Wrapper/UserProtectedWrapper'
 
 const App = () => {
   return (
@@ -22,7 +23,11 @@ const App = () => {
         <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
  
         //Routes for User After Login
-        <Route path='/user-home' element={<UserHome />} />
+        <Route path='/user-home' element={
+          <UserProtectedWrapper>
+            <UserHome />
+          </UserProtectedWrapper>
+        } />
       </Routes>
     </div>
   )
