@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserDataContext }  from "../../context/UserContext";
 
 const UserSignup = () => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [firstname, setfirstname] = useState("");
   const [lastname, setlastname] = useState("");
-  const [userData, setuserData] = useState("");
+  const [userData, setUserData] = useState("");
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const { user, setUser } = React.useContext(UserDataContext);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const userDataObject = {
+    const newUser = {
       email: email,
       password: password,
-      fullName: {
+      fullname: {
         firstname: firstname,
         lastname: lastname,
       },
     };
-    setuserData(userDataObject);
-    console.log("User Data:", userDataObject); // Log the object directly
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/users/register`,newUser);
+    if(response.status === 201){
+      const data = response.data
+      setUser(data.user)
+      navigate('/user-login')
+    }
+    // Log the object directly
     setemail("");
     setpassword("");
     setfirstname("");
@@ -101,7 +112,7 @@ const UserSignup = () => {
             </div>
 
             <button className="w-full rounded-xl bg-slate-900 px-4 py-3 text-base font-semibold text-white transition hover:bg-slate-800 active:scale-95">
-              Register
+              Create Account
             </button>
           </form>
 
