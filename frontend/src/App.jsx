@@ -9,6 +9,7 @@ import TermsAndConditions from './pages/PrivacyAndTermPage/TermsAndConditions'
 import GetStart from './pages/GetStart'
 import UserHome from './pages/UserHomePage/UserHome'
 import UserProtectedWrapper from './Wrapper/UserProtectedWrapper'
+import UserLogout from './pages/UserLoginRegister/UserLogout'
 
 const App = () => {
   return (
@@ -26,6 +27,11 @@ const App = () => {
         <Route path='/user-home' element={
           <UserProtectedWrapper>
             <UserHome />
+          </UserProtectedWrapper>
+        } />
+        <Route path ='/user-logout' element ={
+          <UserProtectedWrapper>
+            <UserLogout />
           </UserProtectedWrapper>
         } />
       </Routes>
